@@ -13,7 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, LayoutDashboard, BookOpen, BrainCircuit, Rocket, ChevronRight, Database, Code2, ShieldCheck, Cpu, Menu, X, User, Settings as SettingsIcon, LogOut, Search } from "lucide-react";
+import { GraduationCap, LayoutDashboard, BookOpen, BrainCircuit, Rocket, ChevronRight, Database, Code2, ShieldCheck, Cpu, Menu, X, User, Settings as SettingsIcon, LogOut, Search, Bell } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
@@ -58,15 +58,15 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-foreground flex dark selection:bg-primary/30">
-      {/* Sidebar */}
+    <div className="min-h-screen bg-[#0a0a0a] text-foreground flex flex-col lg:flex-row dark selection:bg-primary/30">
+      {/* Sidebar - Desktop: Fixed, Mobile: Drawer */}
       <aside 
         className={`${
-          isSidebarOpen ? "w-72" : "w-20"
-        } transition-all duration-300 border-r border-white/5 bg-[#0f0f0f] flex flex-col sticky top-0 h-screen z-50`}
+          isSidebarOpen ? "translate-x-0 w-72" : "-translate-x-full lg:translate-x-0 lg:w-20"
+        } fixed lg:sticky top-0 left-0 h-screen transition-all duration-300 border-r border-white/5 bg-[#0f0f0f] flex flex-col z-50`}
       >
         <div className="p-6 flex items-center justify-between">
-          <div className={`flex items-center gap-3 overflow-hidden transition-opacity duration-300 ${isSidebarOpen ? "opacity-100" : "opacity-0 w-0"}`}>
+          <div className={`flex items-center gap-3 overflow-hidden transition-opacity duration-300 ${isSidebarOpen ? "opacity-100" : "lg:opacity-0 lg:w-0"}`}>
             <div className="bg-primary text-primary-foreground p-2 rounded-xl shadow-lg shadow-primary/20">
               <GraduationCap className="w-6 h-6" />
             </div>
@@ -76,9 +76,17 @@ export default function App() {
             variant="ghost" 
             size="icon" 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="hover:bg-white/5"
+            className="hover:bg-white/5 hidden lg:flex"
           >
             {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setIsSidebarOpen(false)}
+            className="hover:bg-white/5 lg:hidden"
+          >
+            <X className="w-5 h-5" />
           </Button>
         </div>
 
@@ -138,32 +146,41 @@ export default function App() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-grow flex flex-col h-screen overflow-hidden">
+      <main className="flex-grow flex flex-col h-screen overflow-hidden pb-20 lg:pb-0">
         {/* Top Header */}
-        <header className="h-20 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-40">
-          <div className="flex items-center gap-4 flex-grow max-w-xl">
+        <header className="h-20 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40">
+          <div className="flex items-center gap-3 lg:hidden">
+            <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(true)}>
+              <Menu className="w-6 h-6" />
+            </Button>
+            <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
+              <GraduationCap className="w-5 h-5" />
+            </div>
+          </div>
+          <div className="flex items-center gap-4 flex-grow max-w-xl mx-4">
             <div className="relative w-full group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <input 
                 type="text" 
-                placeholder="Pesquisar aulas, tópicos ou materiais..." 
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all"
+                placeholder="Pesquisar..." 
+                className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all"
               />
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-green-500 uppercase tracking-wider">Sistema Online</span>
+              <span className="text-[10px] font-bold text-green-500 uppercase tracking-wider">Online</span>
             </div>
-            <Button variant="outline" size="sm" className="rounded-xl border-white/10 hover:bg-white/5">
-              Notificações
+            <Button variant="outline" size="icon" className="rounded-xl border-white/10 hover:bg-white/5 lg:px-4 lg:w-auto">
+              <Bell className="w-4 h-4 lg:mr-2" />
+              <span className="hidden lg:inline">Notificações</span>
             </Button>
           </div>
         </header>
 
         <ScrollArea className="flex-grow">
-          <div className="p-8 max-w-7xl mx-auto space-y-8">
+          <div className="p-4 lg:p-8 max-w-7xl mx-auto space-y-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
@@ -284,6 +301,34 @@ export default function App() {
             </AnimatePresence>
           </div>
         </ScrollArea>
+
+        {/* Mobile Bottom Navigation */}
+        <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-[#0f0f0f]/90 backdrop-blur-xl border-t border-white/5 px-6 py-3 flex items-center justify-between z-50">
+          {[
+            { id: "overview", label: "Início", icon: LayoutDashboard },
+            { id: "fundamentals", label: "Fundos", icon: Cpu },
+            { id: "training", label: "Treino", icon: BrainCircuit },
+            { id: "logic", label: "Lógica", icon: Code2 },
+            { id: "more", label: "Mais", icon: Menu },
+          ].map((item) => (
+            <button
+              key={item.id}
+              onClick={() => {
+                if (item.id === "more") setIsSidebarOpen(true);
+                else setActiveTab(item.id);
+              }}
+              className={`flex flex-col items-center gap-1 transition-colors ${
+                activeTab === item.id && item.id !== "more" ? "text-primary" : "text-muted-foreground"
+              }`}
+            >
+              <item.icon className="w-6 h-6" />
+              <span className="text-[10px] font-medium">{item.label}</span>
+              {activeTab === item.id && item.id !== "more" && (
+                <motion.div layoutId="mobile-active" className="w-1 h-1 rounded-full bg-primary mt-0.5" />
+              )}
+            </button>
+          ))}
+        </nav>
       </main>
     </div>
   );
